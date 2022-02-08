@@ -1,7 +1,8 @@
 
 
 
----------------------Check for a unique column that are shared accross the tables, supposedly 'ID'
+--------------------------Check for a unique column that are shared accross the tables, supposedly 'ID'
+
 SELECT
 	COLUMN_NAME,
 	COUNT(TABLE_NAME)
@@ -9,7 +10,10 @@ FROM
 	INFORMATION_SCHEMA.COLUMNS
 GROUP BY COLUMN_NAME;
 
---Confirming ID column is in every table
+
+
+-------------------------------Confirming ID column is in every table
+
 SELECT
 	TABLE_NAME,
 	check_column = SUM(CASE
@@ -34,7 +38,11 @@ WHERE
 GROUP BY TABLE_NAME
 HAVING 'check_date' = '0'
 
+
+
 ----------------------Join the date across the tables, probe to see if the columns has key words for dates
+
+
 SELECT
 	COLUMN_NAME
 FROM FITBIT_DATA.INFORMATION_SCHEMA.COLUMNS
@@ -46,7 +54,11 @@ COLUMN_NAME LIKE '%MINUTE%' OR
 COLUMN_NAME LIKE '%HOURLY%' OR
 COLUMN_NAME LIKE '%HOUR%'
 
---List tables that are at the day level so we can perform analysis on daily data
+
+
+
+----------------------List tables that are at the day level so we can perform analysis on daily data
+
 SELECT
 	DISTINCT(TABLE_NAME)
 FROM
@@ -55,7 +67,12 @@ WHERE
 	COLUMN_NAME LIKE '%DAY%' OR
 	COLUMN_NAME LIKE '%DAILY%'
 
+
+
+
 ---------------------------List the columns with date level from the above tables.
+
+
 SELECT
 	COLUMN_NAME,
 	TABLE_NAME,
@@ -73,7 +90,11 @@ GROUP BY
 	TABLE_NAME,
 	COLUMN_NAME
 
+
+
 --------------------------------another way
+
+
 SELECT
 	COLUMN_NAME,
 	TABLE_NAME,
@@ -87,7 +108,12 @@ GROUP BY
 	TABLE_NAME,
 	COLUMN_NAME
 
+
+
+
 --------------------------Make sure data type in those columns alligns
+
+
 SELECT
 	COLUMN_NAME,
 	TABLE_NAME,
@@ -124,7 +150,9 @@ INTO Fitbit_data.dbo.Sleep_day_alt
 FROM Fitbit_data.dbo.Sleep_day
 
 
+
 ---------------------------Now, join the related tables for a complete table
+
  SELECT
  A.Id,
  A.Calories,
@@ -168,7 +196,9 @@ FROM Fitbit_data.dbo.Sleep_day
 		A.ActivityDate = Sl.SleepDay
 
 
-----------------------ANALYSIS ON NAP TIME
+
+-------------------------------------ANALYSIS ON NAP TIME
+
 SELECT
 	id,
 	sleep_start AS Sleep_date,
@@ -197,7 +227,9 @@ GROUP BY
 ORDER BY total_time_nap
 
 
--------------RUN ANALYSIS ON ACTIVITY
+
+---------------------------------------------RUN ANALYSIS ON ACTIVITY
+
 SET DATEFIRST 1 -- (SUNDAY) ---set sunday as 1
 
 WITH User_dow_summary AS
@@ -294,8 +326,3 @@ BASIC_SUMMARY.part_of_week,
 BASIC_SUMMARY.Time_of_day
 ;
 
-  --------------HEART RATE ANALYSIS
-  --Game plan: set up day_of_week, weekends/weekday,
-  --average heart rate
-  --max HR, min HR
-  --period of activity, 
